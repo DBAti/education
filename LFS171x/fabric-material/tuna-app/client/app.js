@@ -11,7 +11,7 @@ app.controller('appController', function($scope, appFactory){
 	$("#success_create").hide();
 	$("#error_holder").hide();
 	$("#error_query").hide();
-	
+
 	$scope.queryAllTuna = function(){
 
 		appFactory.queryAllTuna(function(data){
@@ -22,7 +22,7 @@ app.controller('appController', function($scope, appFactory){
 				array.push(data[i].Record);
 			}
 			array.sort(function(a, b) {
-			    return parseFloat(a.Key) - parseFloat(b.Key);
+				return parseFloat(a.Key) - parseFloat(b.Key);
 			});
 			$scope.all_tuna = array;
 		});
@@ -66,22 +66,36 @@ app.controller('appController', function($scope, appFactory){
 		});
 	}
 
+	$scope.queryTunaHistory = function(){
+
+		var id = $scope.tuna_id_history;
+
+		appFactory.queryTunaHistory(id, function(data){
+
+			var array = [];
+			for (var i = 0; i < data.length; i++){
+				array.push(data[i]);
+			}
+			$scope.query_tuna_history = array;
+		});
+	}
+
 });
 
 // Angular Factory
 app.factory('appFactory', function($http){
-	
+
 	var factory = {};
 
-    factory.queryAllTuna = function(callback){
+	factory.queryAllTuna = function(callback){
 
-    	$http.get('/get_all_tuna/').success(function(output){
+		$http.get('/get_all_tuna/').success(function(output){
 			callback(output)
 		});
 	}
 
 	factory.queryTuna = function(id, callback){
-    	$http.get('/get_tuna/'+id).success(function(output){
+		$http.get('/get_tuna/'+id).success(function(output){
 			callback(output)
 		});
 	}
@@ -92,7 +106,7 @@ app.factory('appFactory', function($http){
 
 		var tuna = data.id + "-" + data.location + "-" + data.timestamp + "-" + data.holder + "-" + data.vessel;
 
-    	$http.get('/add_tuna/'+tuna).success(function(output){
+		$http.get('/add_tuna/'+tuna).success(function(output){
 			callback(output)
 		});
 	}
@@ -101,7 +115,13 @@ app.factory('appFactory', function($http){
 
 		var holder = data.id + "-" + data.name;
 
-    	$http.get('/change_holder/'+holder).success(function(output){
+		$http.get('/change_holder/'+holder).success(function(output){
+			callback(output)
+		});
+	}
+
+	factory.queryTunaHistory = function (id, callback) {
+		$http.get('/get_tuna_history/' + id).success(function (output) {
 			callback(output)
 		});
 	}
