@@ -69,6 +69,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.queryAllTuna(APIstub)
 	} else if function == "changeTunaHolder" {
 		return s.changeTunaHolder(APIstub, args)
+	} else if function == "queryTunaHistory" {
+		return s.queryTunaHistory(APIstub, args)
 	}
 
 	return shim.Error("Invalid Smart Contract function name.")
